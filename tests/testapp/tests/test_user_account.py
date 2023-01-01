@@ -2,10 +2,20 @@ import datetime
 
 from django.core import mail
 from django.test import TestCase
+from django.db import DEFAULT_DB_ALIAS
 
-from django_capture_on_commit_callbacks import capture_on_commit_callbacks
+import django_capture_on_commit_callbacks
 
 from tests.testapp.models import CannotDeleteActiveTrial, Organization, UserAccount
+
+
+def capture_on_commit_callbacks(using=DEFAULT_DB_ALIAS, execute=False):
+    context_manager = getattr(
+        TestCase,
+        "captureOnCommitCallbacks",
+        django_capture_on_commit_callbacks.capture_on_commit_callbacks,
+    )
+    return context_manager(using=using, execute=execute)
 
 
 class UserAccountTestCase(TestCase):
@@ -115,7 +125,7 @@ class UserAccountTestCase(TestCase):
 
             account.save()
 
-        self.assertEquals(
+        self.assertEqual(
             len(callbacks), 1, msg="Only one hook should be an on_commit callback"
         )
         self.assertEqual(len(mail.outbox), 2)
