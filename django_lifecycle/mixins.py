@@ -223,7 +223,6 @@ class LifecycleModelMixin(object):
     def _watched_fk_models(cls) -> List[str]:
         return [_.split(".")[0] for _ in cls._watched_fk_model_fields()]
 
-
     def _get_hooked_methods(self, hook: str, **kwargs) -> List[AbstractHookedMethod]:
         """
         Iterate through decorated methods to find those that should be
