@@ -14,7 +14,7 @@ def get_metadata(package, field):
     init_py = codecs.open(os.path.join(package, "__init__.py"), encoding="utf-8").read()
     return re.search(
         f"^__{field}__ = ['\"]([^'\"]+)['\"]", init_py, re.MULTILINE
-    ).group(1) # pyright: ignore
+    ).group(1)
 
 
 def readme():
@@ -51,5 +51,5 @@ setup(
     classifiers=classifiers,
     long_description_content_type="text/markdown",
     install_requires=["Django>=3.2", "urlman>=1.2.0", "packaging>=21.0"],
-    python_requires=">=3.8"
+    python_requires=">=3.8",
 )
