@@ -37,7 +37,7 @@ class UserAccountTestCase(TestCase):
         with capture_on_commit_callbacks(execute=True) as callbacks:
             UserAccount.objects.create(**self.stub_data)
 
-        self.assertEquals(len(callbacks), 1, msg=f"{callbacks}")
+        self.assertEqual(len(callbacks), 1, msg=f"{callbacks}")
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, "Welcome!")
 
@@ -97,7 +97,7 @@ class UserAccountTestCase(TestCase):
 
             account.save()
 
-        self.assertEquals(len(callbacks), 1)
+        self.assertEqual(len(callbacks), 1)
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(
             mail.outbox[0].subject, "The name of your organization has changed!"

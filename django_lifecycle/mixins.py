@@ -56,7 +56,7 @@ def instantiate_hooked_method(method: Any, callback_specs: HookConfig) -> Abstra
     )
 
 
-class LifecycleModelMixin(object):
+class LifecycleModelMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._initial_state = self._snapshot_state()

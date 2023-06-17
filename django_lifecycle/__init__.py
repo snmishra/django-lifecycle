@@ -5,14 +5,14 @@ __author__ = "Robert Singer"
 __author_email__ = "robertgsinger@gmail.com"
 
 
-class NotSet(object):
+class NotSet:
     pass
 
 
-from .decorators import hook
-from .mixins import LifecycleModelMixin
-from .hooks import *
+from .decorators import hook as hook # noqa: E402
+from .mixins import LifecycleModelMixin as LifecycleModelMixin # noqa: E402
+from .hooks import * # noqa: E402, F403
 
 
 if IS_GTE_1_POINT_9:
-    from .models import LifecycleModel
+    from .models import LifecycleModel as LifecycleModel # noqa: E402
