@@ -27,7 +27,6 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -36,6 +35,7 @@ classifiers = [
     "Framework :: Django :: 3.2",
     "Framework :: Django :: 4.0",
     "Framework :: Django :: 4.1",
+    "Framework :: Django :: 4.2",
 ]
 setup(
     name="django-lifecycle",
@@ -51,5 +51,5 @@ setup(
     classifiers=classifiers,
     long_description_content_type="text/markdown",
     install_requires=["Django>=3.2", "urlman>=1.2.0", "packaging>=21.0"],
-    python_requires=">=3.7"
+    python_requires=">=3.8"
 )

@@ -30,7 +30,7 @@ class HookConfig(Validations):
     def validate_hook(self, value, **kwargs):
         if value not in VALID_HOOKS:
             raise DjangoLifeCycleException(
-                "{} is not a valid hook; must be one of {}".format(hook, VALID_HOOKS)
+                f"{hook} is not a valid hook; must be one of {VALID_HOOKS}"
             )
 
         return value
