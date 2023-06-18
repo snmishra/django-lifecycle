@@ -2,7 +2,7 @@ import inspect
 from typing import Iterable, Type, Union
 
 from django.apps import AppConfig, apps
-from django.core.checks import Error, register, Tags
+from django.core.checks import Error
 from django.db import models
 
 
