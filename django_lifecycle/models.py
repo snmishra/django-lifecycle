@@ -8,6 +8,6 @@ from django.db import models
 from .mixins import LifecycleModelMixin
 
 
-class LifecycleModel(LifecycleModelMixin, models.Model):
+class LifecycleModel(LifecycleModelMixin, models.Model):  # type: ignore [misc]
     class Meta:
         abstract = True

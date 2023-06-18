@@ -20,6 +20,7 @@ from .hooks import (
     AFTER_SAVE,
     AFTER_DELETE,
 )
+from django.db.models import Model
 
 
 class HookedMethod(AbstractHookedMethod):
@@ -27,12 +28,12 @@ class HookedMethod(AbstractHookedMethod):
     def name(self) -> str:
         return self.method.__name__
 
-    def run(self, instance: Any) -> None:
+    def run(self, instance: Model) -> None:
         self.method(instance)
 
 
 class OnCommitHookedMethod(AbstractHookedMethod):
-    """ Hooked method that should run on_commit """
+    """Hooked method that should run on_commit"""
 
     @property
     def name(self) -> str:
@@ -40,11 +41,11 @@ class OnCommitHookedMethod(AbstractHookedMethod):
         # the same hook within the atomic transaction and on_commit
         return f"{self.method.__name__}_on_commit"
 
-    def run(self, instance: Any) -> None:
+    def run(self, instance: Model) -> None:
         # Use partial to create a function closure that binds `self`
         # to ensure it's available to execute later.
         _on_commit_func = partial(self.method, instance)
-        _on_commit_func.__name__ = self.name
+        _on_commit_func.__name__ = self.name  # type: ignore [attr-defined]
         transaction.on_commit(_on_commit_func)
 
 
@@ -95,7 +96,7 @@ class LifecycleModelMixin:
 
     def _sanitize_field_name(self, field_name: str) -> str:
         try:
-            internal_type = self._meta.get_field(field_name).get_internal_type()
+            internal_type = self._meta.get_field(field_name).get_internal_type()  # type: ignore [attr-defined]
             if internal_type == "ForeignKey" or internal_type == "OneToOneField":
                 if not field_name.endswith("_id"):
                     return field_name + "_id"
@@ -248,10 +249,7 @@ class LifecycleModelMixin:
                     if not self._check_callback_conditions(
                         when_field,
                         callback_specs,
-                        is_synced=(
-                            is_partial_fields_update is False
-                            or when_field in update_fields
-                        ),
+                        is_synced=(is_partial_fields_update is False or when_field in update_fields),
                     ):
                         continue
                 elif when_any_field:
@@ -261,10 +259,7 @@ class LifecycleModelMixin:
                         if self._check_callback_conditions(
                             field_name,
                             callback_specs,
-                            is_synced=(
-                                is_partial_fields_update is False
-                                or field_name in update_fields
-                            ),
+                            is_synced=(is_partial_fields_update is False or field_name in update_fields),
                         ):
                             any_condition_matched = True
                             break
@@ -281,7 +276,7 @@ class LifecycleModelMixin:
         return sorted(hooked_methods)
 
     def _run_hooked_methods(self, hook: str, **kwargs) -> List[str]:
-        """ Run hooked methods """
+        """Run hooked methods"""
         fired = []
 
         for method in self._get_hooked_methods(hook, **kwargs):
@@ -290,9 +285,7 @@ class LifecycleModelMixin:
 
         return fired
 
-    def _check_callback_conditions(
-        self, field_name: str, specs: dict, is_synced: bool
-    ) -> bool:
+    def _check_callback_conditions(self, field_name: str, specs: HookConfig, is_synced: bool) -> bool:
         if not self._check_has_changed(field_name, specs, is_synced):
             return False
 
@@ -334,9 +327,7 @@ class LifecycleModelMixin:
         was_not = specs.was_not
         return was_not is NotSet or self.initial_value(field_name) != was_not
 
-    def _check_changes_to_condition(
-        self, field_name: str, specs: HookConfig, is_synced: bool
-    ) -> bool:
+    def _check_changes_to_condition(self, field_name: str, specs: HookConfig, is_synced: bool) -> bool:
         if not is_synced:
             return False
 
@@ -344,10 +335,7 @@ class LifecycleModelMixin:
         return any(
             [
                 changes_to is NotSet,
-                (
-                    self.initial_value(field_name) != changes_to
-                    and self._current_value(field_name) == changes_to
-                ),
+                (self.initial_value(field_name) != changes_to and self._current_value(field_name) == changes_to),
             ]
         )
 
@@ -363,9 +351,7 @@ class LifecycleModelMixin:
         for name in dir(cls):
             attr = getattr(cls, name, None)
 
-            if attr and (
-                isinstance(attr, property) or isinstance(attr, cached_property)
-            ):
+            if attr and (isinstance(attr, property) or isinstance(attr, cached_property)):
                 property_names.append(name)
 
         return property_names
@@ -393,11 +379,11 @@ class LifecycleModelMixin:
     def _get_field_names(cls) -> List[str]:
         names = []
 
-        for f in cls._meta.get_fields():
+        for f in cls._meta.get_fields():  # type: ignore [attr-defined]
             names.append(f.name)
 
             try:
-                internal_type = cls._meta.get_field(f.name).get_internal_type()
+                internal_type = cls._meta.get_field(f.name).get_internal_type()  # type: ignore [attr-defined]
             except AttributeError:
                 # Skip fields which don't provide a `get_internal_type` method, e.g. GenericForeignKey
                 continue

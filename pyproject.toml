@@ -9,3 +9,10 @@ target-version = "py38"
 [tool.black]
 line-length = 120
 target-version = ['py38']
+extend-exclude = '''
+# A regex preceded with ^/ will apply only to files and directories
+# in the root of the project.
+(
+  migrations/  # exclude migrations
+)
+'''

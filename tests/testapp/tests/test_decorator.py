@@ -23,7 +23,6 @@ class DecoratorTests(TestCase):
 
     def test_priority_hooks(self):
         class FakeModel(LifecycleModelMixin, models.Model):
-
             @hook(AFTER_CREATE)
             def mid_priority(self):
                 pass

@@ -99,9 +99,7 @@ class UserAccountTestCase(TestCase):
 
         self.assertEqual(len(callbacks), 1)
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(
-            mail.outbox[0].subject, "The name of your organization has changed!"
-        )
+        self.assertEqual(mail.outbox[0].subject, "The name of your organization has changed!")
 
     def test_no_notify_sent_if_org_name_has_not_changed(self):
         org = Organization.objects.create(name="Hogwarts")
@@ -125,13 +123,9 @@ class UserAccountTestCase(TestCase):
 
             account.save()
 
-        self.assertEqual(
-            len(callbacks), 1, msg="Only one hook should be an on_commit callback"
-        )
+        self.assertEqual(len(callbacks), 1, msg="Only one hook should be an on_commit callback")
         self.assertEqual(len(mail.outbox), 2)
-        self.assertEqual(
-            mail.outbox[1].subject, "The name of your organization has changed!"
-        )
+        self.assertEqual(mail.outbox[1].subject, "The name of your organization has changed!")
         self.assertEqual(mail.outbox[0].subject, "You were moved to our online school!")
 
     def test_email_user_about_name_change(self):
@@ -139,9 +133,7 @@ class UserAccountTestCase(TestCase):
         mail.outbox = []
         account.first_name = "Homer the Great"
         account.save()
-        self.assertEqual(
-            mail.outbox[0].body, "You changed your first name or your last name"
-        )
+        self.assertEqual(mail.outbox[0].body, "You changed your first name or your last name")
 
     def test_does_not_email_user_about_name_change_when_name_excluded_from_update_fields(
         self,
@@ -153,12 +145,8 @@ class UserAccountTestCase(TestCase):
 
         old_password_updated_at = account.password_updated_at
         account.save(update_fields=["password"])
-        self.assertEqual(
-            len(mail.outbox), 0
-        )  # `first_name` change was skipped (as a hook).
-        self.assertNotEqual(
-            account.password_updated_at, old_password_updated_at
-        )  # Ensure the other hook is fired.
+        self.assertEqual(len(mail.outbox), 0)  # `first_name` change was skipped (as a hook).
+        self.assertNotEqual(account.password_updated_at, old_password_updated_at)  # Ensure the other hook is fired.
 
     def test_emails_user_about_name_change_when_one_field_from_update_fields_intersects_with_condition(
         self,
@@ -170,12 +158,8 @@ class UserAccountTestCase(TestCase):
 
         old_password_updated_at = account.password_updated_at
         account.save(update_fields=["first_name", "password"])
-        self.assertEqual(
-            mail.outbox[0].body, "You changed your first name or your last name"
-        )
-        self.assertNotEqual(
-            account.password_updated_at, old_password_updated_at
-        )  # Both hooks fired.
+        self.assertEqual(mail.outbox[0].body, "You changed your first name or your last name")
+        self.assertNotEqual(account.password_updated_at, old_password_updated_at)  # Both hooks fired.
 
     def test_empty_update_fields_does_not_fire_any_hooks(self):
         # In Django, an empty list supplied to `update_fields` means not updating any field.
@@ -188,9 +172,7 @@ class UserAccountTestCase(TestCase):
         account.save(update_fields=[])
         # Did not raise, so last name hook didn't fire.
         self.assertEqual(len(mail.outbox), 0)
-        self.assertEqual(
-            account.password_updated_at, old_password_updated_at
-        )  # Password hook didn't fire either.
+        self.assertEqual(account.password_updated_at, old_password_updated_at)  # Password hook didn't fire either.
 
     def test_skip_hooks(self):
         """
