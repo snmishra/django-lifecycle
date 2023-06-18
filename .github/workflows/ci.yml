@@ -33,7 +33,7 @@ jobs:
         run: |
           pip install black ruff
           ruff django_lifecycle tests
-          black --check django_lifecyle tests
+          black --check django_lifecycle tests
 
       - name: Run tests
         run: |
