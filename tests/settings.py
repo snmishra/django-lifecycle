@@ -41,10 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "tests.testapp",
 ]
-
-# Django 1.8 requires that abstract model app is in INSTALLED_APPS
-if Version("1.8") <= Version(django.__version__) < Version("1.9"):
-    INSTALLED_APPS.append("django_lifecycle")
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 MIDDLEWARE = [
@@ -93,9 +90,7 @@ DATABASES = {
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
