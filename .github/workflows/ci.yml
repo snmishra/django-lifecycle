@@ -8,6 +8,17 @@ on:
       - master
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3      
+      - name: Lint
+        run: |
+          pip install black ruff
+          ruff django_lifecycle tests
+          black --check django_lifecycle tests
+
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -28,18 +39,13 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           pip install -r requirements.txt
 
-      - name: Lint
-        continue-on-error: true
-        run: |
-          pip install black ruff
-          ruff django_lifecycle tests
-          black --check django_lifecycle tests
-
       - name: Run tests
         run: |
           pip install tox tox-gh-actions
           tox
-
+  build:
+    runs-on: ubuntu-latest
+    steps:
       - name: Package library as wheel
         run: |
           pip install build
