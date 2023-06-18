@@ -31,9 +31,9 @@ jobs:
       - name: Lint
         continue-on-error: true
         run: |
-          pip install black flake8
-          flake8 . --exclude=venv/,.tox/,django_lifecycle/__init__.py
-          black --check django-lifecyle tests
+          pip install black ruff
+          ruff django_lifecycle tests
+          black --check django_lifecyle tests
 
       - name: Run tests
         run: |

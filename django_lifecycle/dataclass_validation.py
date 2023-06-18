@@ -9,14 +9,13 @@ class Validations:
 
     def __post_init__(self):
         """
-        Run validation methods if declared.
-        The validation method can be a simple check
-        that raises ValueError or a transformation to
-        the field value.
-        The validation is performed by calling a function named:
+        Run validation methods if declared. The validation method can be a
+        simple check that raises ValueError or a transformation to the field
+        value. The validation is performed by calling a function named:
             `validate_<field_name>(self, value, field) -> field.type`
 
-        Finally, calls (if defined) `validate(self)` for validations that depend on other fields
+        Finally, calls (if defined) `validate(self)` for validations that depend
+        on other fields
         """
         for name, field in self.__dataclass_fields__.items():
             validator_name = f"validate_{name}"
