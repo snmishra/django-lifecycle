@@ -39,3 +39,14 @@ jobs:
         run: |
           pip install tox tox-gh-actions
           tox
+
+      - name: Package library as wheel
+        run: |
+          pip install build
+          python -m build
+
+      - name: Upload wheel as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: django-lifecycle
+          path: dist/*.whl

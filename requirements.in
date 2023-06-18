@@ -23,5 +23,6 @@ pyyaml-env-tag
 ruff
 sqlparse
 tornado
+tox
 urlman
 zipp
